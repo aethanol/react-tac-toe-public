@@ -1,8 +1,8 @@
 /** all buttons are the same size **/
-/*button {
+button {
   width: 80px;
   height: 80px;
-}*/
+}
 
 /** make buttons bigger font **/
 /*.btn-group-lg>.btn, .btn-lg, .btn {
