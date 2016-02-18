@@ -7,16 +7,18 @@ var game = require('./game.js'); // Game Model
 var components = require('./components.jsx'); // React View
 // var controller = require('./controller.js'); // Controller
 
-var View = components.GameBoard;
-var TicTacToeGame = new game.TicTacToeGame();
+var Board = components.GameBoard;
+var TicTacToeGame = new game.TicTacToeGame(4);
 
 var controller = {
     takeTurn : function(index){
+        console.log(index);
         TicTacToeGame.takeTurn(index);
+        this.update();
     },
     
     update : function(){
-        ReactDOM.render(<View model={TicTacToeGame} controller={controller}/>, document.getElementById('content')); 
+        ReactDOM.render(<Board model={TicTacToeGame} controller={this}/>, document.getElementById('content')); 
     }
 };
 

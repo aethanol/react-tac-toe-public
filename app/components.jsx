@@ -9,9 +9,9 @@ var Button = require('react-bootstrap').Button;
 var Turn = React.createClass({
     render: function() {
         return (
-            <div>
-                
-            </div>
+            <span>
+                <h3>Turn {this.props.turn}</h3>    
+            </span>
         )
         
     }
@@ -21,25 +21,33 @@ var Turn = React.createClass({
 var Score = React.createClass({
     render : function() {
         return (
-            <div>
-                <table>
-                    <tr>
-                        <th scope='col'>Score</th>
-                    </tr>
-                    <tr>
-                        <th scope="row">Player X:</th>
-                        <td>{this.props.score[0]}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Player O:</th>
-                        <td>{this.props.score[1]}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Ties:</th>
-                        <td>{this.props.score['tie']}</td>
-                    </tr>                
-                </table>
-            </div>
+            <span>
+                <h3>Score</h3>
+                <h5>Player X: </h5> 
+                <h5>Player 0: </h5> 
+                <h5>Ties: </h5> 
+            </span>
+                
+            
+            
+                // <tbody>
+                //     <tr>
+                //         <th scope='col'>Score</th>
+                //     </tr>
+                //     <tr>
+                //         <th scope="row">Player X:</th>
+                //         <td>{this.props.score[0]}</td>
+                //     </tr>
+                //     <tr>
+                //         <th scope="row">Player O:</th>
+                //         <td>{this.props.score[1]}</td>
+                //     </tr>
+                //     <tr>
+                //         <th scope="row">Ties:</th>
+                //         <td>{this.props.score['tie']}</td>
+                //     </tr>                
+                // </tbody>
+            
         )
         
     }
@@ -50,10 +58,10 @@ var Information = React.createClass({
         var score = this.props.model.score;
         var turn = this.props.model.turn;
         return (
-            <div>
-                <Score score={score}/>
-                <Turn turn={turn}/>
-            </div>
+            <body>
+                    <Score score={score}/>
+                    <Turn turn={turn}/>   
+            </body>
         )
     }
 });
@@ -62,14 +70,14 @@ var Information = React.createClass({
 // TODO: should each tile be a separate component???
 // TODO--EXTRA CREDIT: dynamic resizing of tic tac toe board: 3x3 -> 4x4 -> 5x5
 var Tile = React.createClass({
-        // TODO call controler to handle the click
+        // TODO call controller to handle the click
        // passthrough function so controller handles the click
     handleClick : function() {
         this.props.controller.takeTurn(this.props.id);
     },
     
     render : function() {
-        return <Button onClick={this.handleClick}></Button>
+        return <Button onClick={this.handleClick}>{this.props.model.board[this.props.id]}</Button>
     }
     
 });
@@ -78,25 +86,24 @@ var Tile = React.createClass({
 // TODO use .map function somehow??? lol somehow foreach
 var Board = React.createClass({
     render : function() {
-       return (
+        
+        var tiles = this.props.model.board.map(function(element ,index){
+            
+            return <Tile key={index} id={index} controller={this.props.controller} model={this.props.model}/>
+            
+        },this)
+        
+        return (
            <div id='board'>
-             <div id='0'>
-                <Tile id={0} />
-                <Tile id={1} />
-                <Tile id={2} />       
-             </div>
-             <div id='1'>
-                <Tile id={3} />
-                <Tile id={4} />
-                <Tile id={5} />       
-             </div>
-             <div id='2'>
-                <Tile id={6} />
-                <Tile id={7} />
-                <Tile id={8} />       
-             </div>
-          </div>           
+                {tiles}
+           </div>     
             ) 
+    }
+});
+
+var Size = React.createClass({
+    render : function() {
+        
     }
 });
 
@@ -113,7 +120,7 @@ var GameBoard = React.createClass({
         return (
             <div>
                 <Title />
-                <Board model={this.props.model}/>   
+                <Board model={this.props.model} controller={this.props.controller}/>   
                 <Information model={this.props.model} />       
             </div>
         )
