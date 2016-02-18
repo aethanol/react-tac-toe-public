@@ -2,7 +2,12 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Button = require('react-bootstrap').Button;
+var Bootstrap = require('react-bootstrap');
+var Button = Bootstrap.Button;
+var Dropdown = Bootstrap.DropdownButton;
+var ButtonGroup = Bootstrap.ButtonGroup;
+var MenuItem = Bootstrap.MenuItem;
+
 //var Game = require('./game.js');
 
 // keep track of turns
@@ -23,9 +28,9 @@ var Score = React.createClass({
         return (
             <span>
                 <h3>Score</h3>
-                <h5>Player X: </h5> 
-                <h5>Player 0: </h5> 
-                <h5>Ties: </h5> 
+                <h5>Player X: {this.props.score['1']}</h5> 
+                <h5>Player 0: {this.props.score['0']}</h5> 
+                <h5>Ties: {this.props.score['tie']} </h5> 
             </span>
                 
             
@@ -58,10 +63,10 @@ var Information = React.createClass({
         var score = this.props.model.score;
         var turn = this.props.model.turn;
         return (
-            <body>
+            <div>
                     <Score score={score}/>
                     <Turn turn={turn}/>   
-            </body>
+            </div>
         )
     }
 });
@@ -77,20 +82,28 @@ var Tile = React.createClass({
     },
     
     render : function() {
-        return <Button onClick={this.handleClick}>{this.props.model.board[this.props.id]}</Button>
+        return <Button onClick={this.handleClick} id="tile">{this.props.model.board[this.props.id]}</Button>
     }
     
 });
 
 // contains Tiles
-// TODO use .map function somehow??? lol somehow foreach
 var Board = React.createClass({
     render : function() {
-        
+        var size = this.props.model.size;
+        // map all elements of model array and make a button for each
         var tiles = this.props.model.board.map(function(element ,index){
-            
-            return <Tile key={index} id={index} controller={this.props.controller} model={this.props.model}/>
-            
+            // conditional to set breaks for the board size
+            if(index % (this.props.model.size) === 0){
+                return (
+                    <span>
+                    <br/>
+                    <Tile key={index} id={index} controller={this.props.controller} model={this.props.model}/>
+                    </span>
+                )
+            }else {
+                return <Tile key={index} id={index} controller={this.props.controller} model={this.props.model}/>    
+            }
         },this)
         
         return (
@@ -101,9 +114,18 @@ var Board = React.createClass({
     }
 });
 
-var Size = React.createClass({
+var Reset = React.createClass({
+    handleClick : function() {
+        this.props.controller.size(this.props.eventKey);
+    },
+    
     render : function() {
-        
+        return (
+            <div>
+                <input onChange={this.handleChange} />
+                <button id='reset' onClick={this.handleClick}>Reset</button>  
+            </div>     
+        )
     }
 });
 
@@ -121,7 +143,8 @@ var GameBoard = React.createClass({
             <div>
                 <Title />
                 <Board model={this.props.model} controller={this.props.controller}/>   
-                <Information model={this.props.model} />       
+                <Information model={this.props.model} />
+                <Reset model={this.props.model} controller={this.props.controller}/> 
             </div>
         )
         

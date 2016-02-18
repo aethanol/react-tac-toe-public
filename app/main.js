@@ -17,6 +17,11 @@ var controller = {
         this.update();
     },
     
+    size : function(size) {
+        TicTacToeGame.build(size);
+        this.update();
+    },
+    
     update : function(){
         ReactDOM.render(<Board model={TicTacToeGame} controller={this}/>, document.getElementById('content')); 
     }

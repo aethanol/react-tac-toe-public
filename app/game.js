@@ -82,7 +82,17 @@ class TicTacToeGame{
     }
     
     get turn(){
-        return this._turn;
+        if(this._turn === 0){
+            return 'O';
+        }
+        if(this._turn === 1){
+            return 'X';
+        }
+        
+    }
+    
+    get size() {
+        return this._size;
     }
     
     get score(){
@@ -92,21 +102,38 @@ class TicTacToeGame{
     takeTurn(index){
         // check to make sure there is no play at the index
         
-        if(this._board[index] === '' && !this._winner){
-            //console.log(this._turn);
-            this._turnHelper(index); // set play index
-            this._isWinner(); // check if that play was a win
-            this._turn = (this._turn === 0) ? 1 : 0;
-            //console.log(this._winLogic);
-            console.log(this._winner);
-        }else {
-            console.log('Space already played'); // TODO propogate error to the controller to notify view
+        if(!this._winner){
+            if(this._board[index] === ''){
+            
+                this._turnHelper(index); // set play index
+                
+                // check if that play was a win
+                if(this._isWinner()){
+                    alert('WINNER! Press reset to play again');
+                } 
+                
+                this._turn = (this._turn === 0) ? 1 : 0;
+            }else {
+                alert('Space already played');
+            }
+            
         }
+        
                       
     }
     
+    _playerConversion(player){
+        if(player === 0){
+            return 'O';
+        }
+        
+        if(player === 1){
+            return 'X';
+        }
+    }
+    
     _turnHelper(index){
-        this._board[index] = this._turn;
+        this._board[index] = this._playerConversion(this._turn);
         
         // check all cols
         this._winLogic[this._turn]['col'][(index % this._size)] += 1;
@@ -130,7 +157,8 @@ class TicTacToeGame{
     _isWinner(){
         if(this._winLogic[this._turn].diag1 === this._size || this._winLogic[this._turn].diag2 === this._size ){
             this._winner = this._turn;
-            return;
+            this._score[this._turn] += 1;
+            return true;
         }
         
         var col = this._winLogic[this._turn]['col'];
@@ -138,7 +166,8 @@ class TicTacToeGame{
         for(var i = 0; i < col.length; i++){
             if(col[i] === this._size){
                 this._winner = this._turn;
-                return;
+                this._score[this._turn] += 1;
+                return true;
             }
         }
         
@@ -146,7 +175,8 @@ class TicTacToeGame{
         for(var j = 0; j < col.length; j++){
             if(row[j] === this._size){
                 this._winner = this._turn;
-                return;
+                this._score[this._turn] += 1;
+                return true;
             }
         }
        

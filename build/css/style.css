@@ -1,8 +1,10 @@
 /** all buttons are the same size **/
-button {
+#tile {
   width: 80px;
   height: 80px;
 }
+
+
 
 /** make buttons bigger font **/
 /*.btn-group-lg>.btn, .btn-lg, .btn {
