@@ -32,27 +32,7 @@ var Score = React.createClass({
                 <h5>Player 0: {this.props.score['0']}</h5> 
                 <h5>Ties: {this.props.score['tie']} </h5> 
             </span>
-                
-            
-            
-                // <tbody>
-                //     <tr>
-                //         <th scope='col'>Score</th>
-                //     </tr>
-                //     <tr>
-                //         <th scope="row">Player X:</th>
-                //         <td>{this.props.score[0]}</td>
-                //     </tr>
-                //     <tr>
-                //         <th scope="row">Player O:</th>
-                //         <td>{this.props.score[1]}</td>
-                //     </tr>
-                //     <tr>
-                //         <th scope="row">Ties:</th>
-                //         <td>{this.props.score['tie']}</td>
-                //     </tr>                
-                // </tbody>
-            
+ 
         )
         
     }
@@ -72,8 +52,6 @@ var Information = React.createClass({
 });
 
 // tiles of the tic tac toe 
-// TODO: should each tile be a separate component???
-// TODO--EXTRA CREDIT: dynamic resizing of tic tac toe board: 3x3 -> 4x4 -> 5x5
 var Tile = React.createClass({
         // TODO call controller to handle the click
        // passthrough function so controller handles the click
@@ -114,19 +92,22 @@ var Board = React.createClass({
     }
 });
 
-// handle the size change!
+// handle the size change and reset with an input elelemt and a button to reset
 var Reset = React.createClass({
+    // state of the input element to default render 4X4
     getInitialState: function() {
         return {
-            value: 'Size'
+            value: '4'
         };
     },
+    // update the state if the box changes
     handleChange: function(evt) {
         this.setState({
             value: evt.target.value
         });
     },
     
+    // reset the model
     handleClick : function() {
         this.props.controller.size(this.state.value)
     },
