@@ -12,7 +12,7 @@ var TicTacToeGame = new game.TicTacToeGame(4);
 
 var controller = {
     takeTurn : function(index){
-        console.log(index);
+        //console.log(index);
         TicTacToeGame.takeTurn(index);
         this.update();
     },

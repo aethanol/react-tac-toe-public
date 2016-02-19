@@ -114,17 +114,31 @@ var Board = React.createClass({
     }
 });
 
+// handle the size change!
 var Reset = React.createClass({
+    getInitialState: function() {
+        return {
+            value: 'Size'
+        };
+    },
+    handleChange: function(evt) {
+        this.setState({
+            value: evt.target.value
+        });
+    },
+    
     handleClick : function() {
-        this.props.controller.size(this.props.eventKey);
+        this.props.controller.size(this.state.value)
     },
     
     render : function() {
         return (
-            <div>
-                <input onChange={this.handleChange} />
-                <button id='reset' onClick={this.handleClick}>Reset</button>  
-            </div>     
+            
+               <div>
+                    <input value={this.state.value} onChange={this.handleChange} />
+                    <button onClick={this.handleClick}>Reset</button>
+                </div>
+                
         )
     }
 });
@@ -150,8 +164,5 @@ var GameBoard = React.createClass({
         
     }
 });
-
-// pass in controller as prop somewhere here?
-//ReactDOM.render(<HelloMessage />, document.getElementById('content'));
 
 module.exports.GameBoard = GameBoard;

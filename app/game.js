@@ -7,29 +7,6 @@ class TicTacToeGame{
             throw new Error('Board size cannot be less than 3');
         }
         
-        this._size;
-        this._winLogic = {
-            0 : {
-                diag1 : 0,
-                diag2 : 0,
-                row : [],
-                col : []
-            },
-            
-            1 : {
-                diag1 : 0,
-                diag2 : 0,
-                row : [],
-                col : []
-            }
-            
-        };
-        
-        // call the build helper method
-        this.build(size);
-        this._turn = Math.floor(Math.random() * 2); // randomly select player 0 or 1 (O or X) 
-        this._winner = undefined; // no winner at beginning
-        
         // initialize player scores object at 0 wins and ties
         this._score = {
             0 : 0,
@@ -37,7 +14,8 @@ class TicTacToeGame{
             'tie' : 0
         };
         
-        
+        // call the build helper method
+        this.build(size);    
     }
     
     // method to build board
@@ -45,10 +23,14 @@ class TicTacToeGame{
         if(size < 3) {
             throw new Error('Board size cannot be less than 3');
         } else {
-            this._size = size;
+            this._size = parseInt(size);
+            this._turnCalc = Math.floor(Math.random() * 2);
+            this._turn = this._turnCalc;
+            this._winner = undefined;
             // then create win logic object for that size
-            this._createWinLogic(size);
             this._board = this._createBoard(size);
+            this._createWinLogic(size);
+            
         }
         
     }
@@ -64,11 +46,30 @@ class TicTacToeGame{
     }
     
     _createWinLogic(size) {
+        
+        this._winLogic = [
+            {
+                diag1 : 0,
+                diag2 : 0,
+                row : [],
+                col : []                
+            },     
+            {
+                diag1 : 0,
+                diag2 : 0,
+                row : [],
+                col : []   
+            }
+            
+        ];
+        
+        
         for(var i = 0; i < size; i++){
             this._winLogic[0].row[i] = 0;
             this._winLogic[0].col[i] = 0;
             this._winLogic[1].row[i] = 0;
             this._winLogic[1].col[i] = 0;
+            
         }
         
     }
@@ -100,26 +101,15 @@ class TicTacToeGame{
     }
     
     takeTurn(index){
-        // check to make sure there is no play at the index
         
-        if(!this._winner){
-            if(this._board[index] === ''){
-            
+        // check if win
+            if(this._board[index] === '' && this._winner === undefined){
                 this._turnHelper(index); // set play index
-                
-                // check if that play was a win
-                if(this._isWinner()){
-                    alert('WINNER! Press reset to play again');
-                } 
-                
+                this._isWinner();
                 this._turn = (this._turn === 0) ? 1 : 0;
             }else {
                 alert('Space already played');
             }
-            
-        }
-        
-                      
     }
     
     _playerConversion(player){
@@ -133,50 +123,65 @@ class TicTacToeGame{
     }
     
     _turnHelper(index){
+        // take the turn (convert to X and O)
         this._board[index] = this._playerConversion(this._turn);
         
-        // check all cols
-        this._winLogic[this._turn]['col'][(index % this._size)] += 1;
         
-        // check all rows
-        this._winLogic;
+        // increment winLogic at that col for that player
+        this._winLogic[this._turn].col[(index % this._size)] += 1;
+        
+        // check if it was a row
+        console.log(index % (this._size + 1));
         
         // check diag1
-        if(index % (this._size + 1) === 0){
+        if(index % (this._size +1) === 0){
+            //console.log('diag1');
             this._winLogic[this._turn].diag1 += 1;  
         }
         
-        // check diag2
-        if(index !== 0 && index % (this._size - 1) === 0){
+        // check diag2 -- not first index or last index
+        if((index !== 0) && index !== Math.pow(this._size,2) - 1  && (index % (this._size - 1) === 0)){
+            //console.log('diag2');
             this._winLogic[this._turn].diag2 += 1;  
         }
+        
+        
         
     }
     
     // check winLogic obj to see if any are at size
     _isWinner(){
-        if(this._winLogic[this._turn].diag1 === this._size || this._winLogic[this._turn].diag2 === this._size ){
+        if(this._winLogic[this._turn].diag1 === this._size){
             this._winner = this._turn;
             this._score[this._turn] += 1;
-            return true;
+            alert('WINNER! Press reset to play again');
         }
         
-        var col = this._winLogic[this._turn]['col'];
+        if(this._winLogic[this._turn].diag2 === this._size){
+            this._winner = this._turn;
+            this._score[this._turn] += 1;
+            alert('WINNER! Press reset to play again');
+        }
         
+        var col = this._winLogic[this._turn].col;
+        
+        // loop through col logic to see if winner
         for(var i = 0; i < col.length; i++){
             if(col[i] === this._size){
                 this._winner = this._turn;
                 this._score[this._turn] += 1;
-                return true;
+                alert('WINNER! Press reset to play again');
             }
         }
         
-        var row = this._winLogic[this._turn]['row'];
-        for(var j = 0; j < col.length; j++){
+        var row = this._winLogic[this._turn].row;
+        
+        // loop through row logic to see if winner
+        for(var j = 0; j < row.length; j++){
             if(row[j] === this._size){
                 this._winner = this._turn;
                 this._score[this._turn] += 1;
-                return true;
+                alert('WINNER! Press reset to play again');
             }
         }
        
